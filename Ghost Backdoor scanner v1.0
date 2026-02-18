@@ -1,0 +1,118 @@
+local mt = getrawmetatable(game)
+local oldNamecall = mt.__namecall
+local oldIndex = mt.__index
+setreadonly(mt, false)
+
+mt.__index = newcclosure(function(t, k)
+    if k == "Kick" or k == "kick" then return function() return nil end end
+    return oldIndex(t, k)
+end)
+
+mt.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    if method == "Kick" or method == "kick" then return nil end
+    return oldNamecall(self, ...)
+end)
+setreadonly(mt, true)
+
+local LMG2L = {};
+LMG2L["ScreenGui_1"] = Instance.new("ScreenGui", game:GetService("CoreGui"));
+LMG2L["ScreenGui_1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+
+LMG2L["Oh iya bro sekalian ya di kasih script drag_2"] = Instance.new("Frame", LMG2L["ScreenGui_1"]);
+local main = LMG2L["Oh iya bro sekalian ya di kasih script drag_2"]
+main["BorderSizePixel"] = 0;
+main["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+main["Size"] = UDim2.new(0, 262, 0, 220);
+main["Position"] = UDim2.new(0, 210, 0, 20);
+main["Name"] = [[Oh iya bro sekalian ya di kasih script drag]];
+
+LMG2L["Frame_3"] = Instance.new("Frame", main);
+LMG2L["Frame_3"]["BorderSizePixel"] = 0;
+LMG2L["Frame_3"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+LMG2L["Frame_3"]["Size"] = UDim2.new(0, 262, 0, 34);
+
+Instance.new("UIStroke", LMG2L["Frame_3"])
+Instance.new("UIStroke", main)
+
+LMG2L["ImageLabel_6"] = Instance.new("ImageLabel", main);
+LMG2L["ImageLabel_6"]["BackgroundTransparency"] = 1;
+LMG2L["ImageLabel_6"]["Image"] = [[rbxassetid://5788730685]];
+LMG2L["ImageLabel_6"]["Size"] = UDim2.new(0, 36, 0, 30);
+LMG2L["ImageLabel_6"]["Position"] = UDim2.new(0, 2, 0, 2);
+
+LMG2L["TextLabel_7"] = Instance.new("TextLabel", main);
+LMG2L["TextLabel_7"]["BackgroundTransparency"] = 1;
+LMG2L["TextLabel_7"]["Size"] = UDim2.new(0, 198, 0, 26);
+LMG2L["TextLabel_7"]["Text"] = [[Ghost Scanner]];
+LMG2L["TextLabel_7"]["Position"] = UDim2.new(0, 38, 0, 4);
+Instance.new("UIStroke", LMG2L["TextLabel_7"])
+
+local CodeBox = Instance.new("TextBox", main);
+CodeBox["Size"] = UDim2.new(0, 256, 0, 106);
+CodeBox["Position"] = UDim2.new(0, 4, 0, 38);
+CodeBox["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+CodeBox["Text"] = "";
+CodeBox["PlaceholderText"] = "Gak ada";
+CodeBox["MultiLine"] = true;
+CodeBox["TextWrapped"] = true;
+
+LMG2L["tombol execute taruh  logika script nya disinih_10"] = Instance.new("TextButton", main);
+local ExecBtn = LMG2L["tombol execute taruh  logika script nya disinih_10"]
+ExecBtn["Size"] = UDim2.new(0, 86, 0, 38);
+ExecBtn["Position"] = UDim2.new(0, 6, 0, 168);
+ExecBtn["Text"] = [[execute]];
+ExecBtn["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+
+LMG2L["ini tombol run taruh logika nya juga disimi_11"] = Instance.new("TextButton", main);
+local ClearBtn = LMG2L["ini tombol run taruh logika nya juga disimi_11"]
+ClearBtn["Size"] = UDim2.new(0, 86, 0, 38);
+ClearBtn["Position"] = UDim2.new(0, 170, 0, 168);
+ClearBtn["Text"] = [[Clear]];
+ClearBtn["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+
+local function Drag(obj)
+    local uis = game:GetService("UserInputService")
+    local dragToggle, dragStart, startPos
+    obj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragToggle = true dragStart = input.Position startPos = obj.Position
+            input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragToggle = false end end)
+        end
+    end)
+    uis.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            if dragToggle then
+                local delta = input.Position - dragStart
+                obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end
+    end)
+end
+Drag(main)
+
+ExecBtn.MouseButton1Click:Connect(function()
+    local payload = CodeBox.Text
+    if payload == "" then return end
+    local remotes = {}
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("RemoteEvent") then table.insert(remotes, v) end
+    end
+    for i, remote in pairs(remotes) do
+        task.spawn(function()
+            local name = remote.Name:lower()
+            if name:find("remote") or name:find("event") or name:find("main") or name:find("server") or name:find("execute") then
+                remote:FireServer(payload)
+                remote:FireServer("execute", payload)
+                if tonumber(payload) then
+                    remote:FireServer("require("..payload..")")
+                end
+            end
+        end)
+        if i % 30 == 0 then task.wait() end
+    end
+end)
+
+ClearBtn.MouseButton1Click:Connect(function() CodeBox.Text = "" end)
+
+return LMG2L["ScreenGui_1"]
