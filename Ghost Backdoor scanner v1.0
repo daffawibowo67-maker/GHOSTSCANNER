@@ -44,7 +44,7 @@ LMG2L["ImageLabel_6"]["Position"] = UDim2.new(0, 2, 0, 2);
 LMG2L["TextLabel_7"] = Instance.new("TextLabel", main);
 LMG2L["TextLabel_7"]["BackgroundTransparency"] = 1;
 LMG2L["TextLabel_7"]["Size"] = UDim2.new(0, 198, 0, 26);
-LMG2L["TextLabel_7"]["Text"] = [[Ghost Scanner]];
+LMG2L["TextLabel_7"]["Text"] = [[Ghost Backdoor Scanner]];
 LMG2L["TextLabel_7"]["Position"] = UDim2.new(0, 38, 0, 4);
 Instance.new("UIStroke", LMG2L["TextLabel_7"])
 
@@ -52,8 +52,8 @@ local CodeBox = Instance.new("TextBox", main);
 CodeBox["Size"] = UDim2.new(0, 256, 0, 106);
 CodeBox["Position"] = UDim2.new(0, 4, 0, 38);
 CodeBox["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-CodeBox["Text"] = "";
-CodeBox["PlaceholderText"] = "";
+CodeBox["Text"] = "LoL";
+CodeBox["PlaceholderText"] = "LoL";
 CodeBox["MultiLine"] = true;
 CodeBox["TextWrapped"] = true;
 
